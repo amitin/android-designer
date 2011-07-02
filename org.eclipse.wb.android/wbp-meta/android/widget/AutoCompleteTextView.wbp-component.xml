@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>An editable text view that shows completion suggestions automatically while the user is typing. The list of suggestions is displayed in a drop down menu from which the user can choose an item to replace the content of the edit box with.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+		<x-attribute name="android:text" value="New AutoCompleteTextView"/>
+	</creation>
+</component>

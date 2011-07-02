@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<x-model class="org.eclipse.wb.android.internal.model.widgets.RadioGroupInfo"/>
+	<description>This class is used to create a multiple-exclusion scope for a set of radio buttons.</description>
+	<!-- CREATION -->
+	<creation>
+		<source/>
+	</creation>
+	<!-- PARAMETERS -->
+	<parameters>
+		<!-- new -->
+		<parameter name="emptyViewGroupText">Empty RadioGroup</parameter>
+		<!-- flow container -->
+		<parameter name="flowContainer.component">android.widget.RadioButton</parameter>
+	</parameters>
+</component>

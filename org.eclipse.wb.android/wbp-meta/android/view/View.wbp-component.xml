@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<x-model class="org.eclipse.wb.android.internal.model.widgets.ViewInfo"/>
+	<!-- EXPOSING RULES -->
+	<exposing-rules>
+		<exclude package="android.view"/>
+		<exclude package="android.widget"/>
+	</exposing-rules>
+	<!-- PROPERTIES -->
+	<properties-preferred names="android:id"/>
+	<properties-advanced names="android:alpha android:background android:contentDescription android:drawingCacheQuality android:duplicateParentState android:fadingEdge android:fadingEdgeLength android:filterTouchesWhenObscured android:fitsSystemWindows android:focusable android:focusableInTouchMode android:hapticFeedbackEnabled android:isScrollContainer android:keepScreenOn android:layerType android:minHeight android:minWidth android:nextFocusDown android:nextFocusForward android:nextFocusLeft android:nextFocusRight android:nextFocusUp android:padding android:paddingBottom android:paddingLeft android:paddingRight android:paddingTop android:rotation android:rotationX android:rotationY android:saveEnabled android:scaleX android:scaleY android:scrollX android:scrollY android:scrollbarAlwaysDrawHorizontalTrack android:scrollbarAlwaysDrawVerticalTrack android:scrollbarDefaultDelayBeforeFade android:scrollbarFadeDuration android:scrollbarSize android:scrollbarStyle android:scrollbarThumbHorizontal android:scrollbarThumbVertical android:scrollbarTrackHorizontal android:scrollbarTrackVertical android:soundEffectsEnabled android:transformPivotX android:transformPivotY android:translationX android:translationY"/>
+	<properties-hidden names="android:gravity"/>
+	<!-- PARAMETERS -->
+	<parameters>
+		<parameter name="GEF.relatedToolkitPackages.1">org.eclipse.wb.android.internal</parameter>
+	</parameters>
+</component>

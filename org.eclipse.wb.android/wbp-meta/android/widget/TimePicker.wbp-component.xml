@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>A view for selecting the time of day, in either 24 hour or AM/PM mode.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- CONSTRUCTORS -->
+	<constructors>
+	</constructors>
+	<!-- METHODS -->
+	<methods>
+	</methods>
+	<!-- PROPERTIES -->
+	<properties-preferred names="text"/>
+	<property-tag name="text" tag="isText" value="true"/>
+	<!-- MORPHING -->
+	<morphTargets>
+	</morphTargets>
+	<!-- PARAMETERS -->
+	<parameters>
+	</parameters>
+</component>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>Visual indicator of progress in some operation. Displays a bar to the user representing how far the operation has progressed.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- PROPERTIES -->
+	<properties-preferred names="android:max android:progress"/>
+</component>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>Widget used to show an image with the standard QuickContact badge and on-click behavior.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+</component>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>Represents a push-button widget. Push-buttons can be pressed, or clicked, by the user to perform an action.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+		<x-attribute name="android:text" value="New Button"/>
+	</creation>
+	<!-- PROPERTIES -->
+	<properties-preferred names="android:text"/>
+	<property-tag name="android:text" tag="isText" value="true"/>
+	<!-- PARAMETERS -->
+	<parameters>
+		<parameter name="x.double-click.listener">onClick</parameter>
+	</parameters>
+</component>

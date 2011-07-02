@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>The ZoomControls class displays a simple set of controls used for zooming and provides callbacks to register for events.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- CONSTRUCTORS -->
+	<constructors>
+	</constructors>
+	<!-- METHODS -->
+	<methods>
+	</methods>
+	<!-- PROPERTIES -->
+	<properties-preferred names="text"/>
+	<property-tag name="text" tag="isText" value="true"/>
+	<!-- MORPHING -->
+	<morphTargets>
+	</morphTargets>
+	<!-- PARAMETERS -->
+	<parameters>
+		<!-- new -->
+		<parameter name="emptyViewGroupText">Empty ZoomControls</parameter>
+	</parameters>
+</component>

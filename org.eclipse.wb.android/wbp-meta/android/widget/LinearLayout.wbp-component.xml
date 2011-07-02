@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<x-model class="org.eclipse.wb.android.internal.model.layouts.LinearLayoutInfo"/>
+	<description>A Layout that arranges its children in a single column or a single row.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- PROPERTIES -->
+	<properties-preferred names="android:orientation"/>
+	<!-- PARAMETERS -->
+	<parameters>
+		<!-- new -->
+		<parameter name="emptyViewGroupText">Empty LinearLayout</parameter>
+		<!-- flow container -->
+		<parameter name="flowContainer">true</parameter>
+		<parameter name="flowContainer.horizontal">isHorizontal()</parameter>
+		<parameter name="flowContainer.component">android.view.View</parameter>
+		<!-- default SelectionEditPolicy -->
+		<parameter name="GEF.defaultSelectionPolicy">
+			org.eclipse.wb.android.internal.gef.policy.layouts.LinearLayoutSelectionEditPolicy
+		</parameter>
+	</parameters>
+</component>

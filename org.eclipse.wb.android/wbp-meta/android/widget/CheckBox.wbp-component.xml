@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>A checkbox is a specific type of two-states button that can be either checked or unchecked.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+		<x-attribute name="android:text" value="New CheckBox"/>
+	</creation>
+	<!-- PROPERTIES -->
+	<properties-preferred names="android:text"/>
+	<property-tag name="android:text" tag="isText" value="true"/>
+</component>

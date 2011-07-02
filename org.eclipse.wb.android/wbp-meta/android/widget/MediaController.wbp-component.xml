@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>A view containing controls for a MediaPlayer. Typically contains the buttons like "Play/Pause", "Rewind", "Fast Forward" and a progress slider.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- CONSTRUCTORS -->
+	<constructors>
+	</constructors>
+	<!-- METHODS -->
+	<methods>
+	</methods>
+	<!-- PROPERTIES -->
+	<properties-preferred names="text"/>
+	<property-tag name="text" tag="isText" value="true"/>
+	<!-- MORPHING -->
+	<morphTargets>
+	</morphTargets>
+	<!-- PARAMETERS -->
+	<parameters>
+	</parameters>
+</component>

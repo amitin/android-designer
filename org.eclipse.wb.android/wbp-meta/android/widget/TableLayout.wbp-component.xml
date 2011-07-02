@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<x-model class="org.eclipse.wb.android.internal.model.layouts.table.TableLayoutInfo"/>
+	<description>A layout that arranges its children into rows and columns.</description>
+	<!-- CREATION -->
+	<creation>
+		<source/>
+	</creation>
+	<!-- PARAMETERS -->
+	<parameters>
+		<!-- new -->
+		<parameter name="emptyViewGroupText">Empty TableLayout</parameter>
+		<!-- flow container -->
+		<parameter name="flowContainer">false</parameter>		
+	</parameters>
+</component>

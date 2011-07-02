@@ -1,0 +1,5 @@
+[ ] *.wbp-component.xml & palette
+[ ] Android target change listener
+[ ] More proper waiting for Android SDK to load
+[ ] Layout supports
+[ ] "live" widgets

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>Displays checked/unchecked states as a button with a "light" indicator and by default accompanied with the text "ON" or "OFF".</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- PROPERTIES -->
+	<properties-preferred names="android:textOn android:textOff"/>
+	<properties-hidden names="android:text"/>
+	<property-tag name="android:text" tag="isText" value="false"/>
+</component>

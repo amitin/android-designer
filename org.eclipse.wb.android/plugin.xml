@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<!-- ======================================================== -->
+	<!-- Exceptions -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.exceptions">
+		<file path="resources/exceptions.xml"/>
+	</extension>
+
+
+	<!-- ======================================================== -->
+	<!-- Java parser validator -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.parseFactories">
+		<validator class="org.eclipse.wb.android.internal.parser.AndroidJavaParseValidator"/>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- Root processors -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.xml.rootProcessors">
+		<processor class="org.eclipse.wb.android.internal.support.DeviceSelectionSupport"/>
+		<processor class="org.eclipse.wb.android.internal.model.widgets.AndroidRootProcessor"/>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- Properties rule -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.xml.descriptionRulesProviders">
+    	<provider class="org.eclipse.wb.android.internal.parser.AndroidDescriptionRulesProvider"/>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- Preferences -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.ui.preferenceTransfer">
+		<transfer id="org.eclipse.wb.android.preferencesTransfer"
+			icon="icons/preference_transfer.png" name="Android Designer Preferences">
+			<mapping scope="instance">
+				<entry node="org.eclipse.wb.android"/>
+			</mapping>
+		</transfer>
+	</extension>
+
+	<extension point="org.eclipse.core.runtime.preferences">
+		<initializer class="org.eclipse.wb.android.internal.preferences.PreferenceInitializer"/>
+	</extension>
+
+	<extension point="org.eclipse.ui.preferencePages">
+		<page category="org.eclipse.wb.core.preferences.MainPreferencePage"
+			class="org.eclipse.wb.android.internal.preferences.AndroidMainPreferencePage"
+			id="org.eclipse.wb.android.preferences.AndroidMainPreferencePage" name="Android">
+		</page>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- Android UI content type and editor -->
+	<!-- ======================================================== -->
+
+	<extension point="org.eclipse.ui.editors">
+		<editor id="org.eclipse.wb.android.editor.AndroidEditor"
+			class="org.eclipse.wb.android.internal.editor.AndroidEditor"
+			contributorClass="org.eclipse.wb.android.internal.editor.AndroidEditorContributor"
+			icon="icons/editor_android.png" name="WindowBuilder Editor">
+		</editor>
+	</extension>
+
+	<extension point="org.eclipse.wb.core.xml.pairResourceProviders">
+		<provider class="org.eclipse.wb.android.internal.editor.AndroidPairResourceProvider"/>
+	</extension>
+
+
+	<!-- ======================================================== -->
+	<!-- Actions and commands -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.ui.editorActions">
+		<editorContribution id="org.eclipse.wb.android.editor.actions"
+			targetID="org.eclipse.wb.android.editor.AndroidEditor">
+			<action id="org.eclipse.wb.core.xml.editor.actions.SwitchAction"
+				class="org.eclipse.wb.internal.core.xml.editor.actions.SwitchAction"
+				definitionId="org.eclipse.wb.core.xml.editor.actions.SwitchAction"
+				label="%actions.switch.name" tooltip="%actions.switch.text" menubarPath="navigate/open.ext2"
+				helpContextId="switch_page"/>
+			<action id="org.eclipse.wb.core.xml.editor.actions.SwitchPairEditorAction"
+				class="org.eclipse.wb.internal.core.xml.editor.actions.SwitchPairEditorAction"
+				definitionId="org.eclipse.wb.core.xml.editor.actions.SwitchPairEditorAction"
+				label="%actions.switchPair.name" tooltip="%actions.switchPair.text"
+				menubarPath="navigate/open.ext2" helpContextId="switch_page"/>
+		</editorContribution>
+	</extension>
+
+
+	<!-- ======================================================== -->
+	<!-- Class loader -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.classLoadingContributor">
+		<contributor namespace="org.eclipse.wb.android.internal."/>
+	</extension>
+
+
+	<!-- ======================================================== -->
+	<!-- Toolkit -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.toolkits">
+    	<toolkit id="org.eclipse.wb.android">
+       		<provider class="org.eclipse.wb.android.internal.ToolkitProvider"/>
+       		<resourcePrefixes>
+				<resourcePrefix>android.view.</resourcePrefix>
+				<resourcePrefix>android.widget.</resourcePrefix>
+			</resourcePrefixes>
+			<palette>
+				<!-- System -->
+				<category id="org.eclipse.wb.android.system" name="System" description="System tools">
+					<x-entry id="system.selection"
+						class="org.eclipse.wb.internal.core.xml.editor.palette.model.SelectionToolEntryInfo"/>
+					<x-entry id="system.marquee"
+						class="org.eclipse.wb.internal.core.xml.editor.palette.model.MarqueeSelectionToolEntryInfo"/>
+					<x-entry id="system.chooseComponent"
+						class="org.eclipse.wb.internal.core.xml.editor.palette.model.ChooseComponentEntryInfo"/>
+				</category>
+				<!-- Form Widgets -->
+				<category id="org.eclipse.wb.android.formWidgets" name="Form Widgets" description="Android Form Widgets">
+					<component class="android.widget.TextView"/>
+					<component class="android.widget.Button"/>
+					<component class="android.widget.CheckBox"/>
+					<component class="android.widget.ToggleButton"/>
+					<component class="android.widget.RadioButton"/>
+					<component class="android.widget.CheckedTextView"/>
+					<component class="android.widget.Spinner"/>
+					<component class="android.widget.EditText"/>
+					<component class="android.widget.AutoCompleteTextView"/>
+					<component class="android.widget.MultiAutoCompleteTextView"/>
+					<component class="android.widget.ProgressBar"/>
+					<component class="android.widget.QuickContactBadge"/>
+					<component class="android.widget.RadioGroup"/>
+					<component class="android.widget.RatingBar"/>
+					<component class="android.widget.SeekBar"/>
+				</category>
+				<!-- Layouts -->
+				<category id="org.eclipse.wb.android.layouts" name="Layouts" description="Android Layouts">
+					<component class="android.widget.LinearLayout"/>
+					<component class="android.widget.RelativeLayout"/>
+					<component class="android.widget.FrameLayout"/>
+					<component class="android.widget.TableLayout"/>
+					<component class="android.widget.TableRow"/>
+				</category>
+				<!-- Composite -->
+				<category id="org.eclipse.wb.android.composite" name="Composite" description="Android Composites">
+					<component class="android.widget.ListView"/>
+					<component class="android.widget.ExpandableListView"/>
+					<component class="android.widget.TwoLineListItem"/>
+					<component class="android.widget.GridView"/>
+					<component class="android.widget.ScrollView"/>
+					<component class="android.widget.HorizontalScrollView"/>
+					<component class="android.widget.SearchView"/>
+					<component class="android.widget.SlidingDrawer"/>
+					<component class="android.widget.TabHost"/>
+					<component class="android.widget.TabWidget"/>
+					<component class="android.widget.WebView"/>
+				</category>
+				<!-- Images & Media -->
+				<category id="org.eclipse.wb.android.images_media" name="Images &amp; Media" description="Android Images &amp; Media">
+					<component class="android.widget.ImageView"/>
+					<component class="android.widget.ImageButton"/>
+					<component class="android.widget.Gallery"/>
+					<component class="android.widget.MediaController"/>
+					<component class="android.widget.VideoView"/>
+				</category>
+				<!-- Time & Date -->
+				<category id="org.eclipse.wb.android.time_date" name="Time &amp; Date" description="Android Time &amp; Date">
+					<component class="android.widget.TimePicker"/>
+					<component class="android.widget.DatePicker"/>
+					<component class="android.widget.CalendarView"/>
+					<component class="android.widget.Chronometer"/>
+					<component class="android.widget.AnalogClock"/>
+					<component class="android.widget.DigitalClock"/>
+				</category>
+				<!-- Advanced -->
+				<category id="org.eclipse.wb.android.advanced" name="Advanced" description="Android Advanced Views">
+					<component class="android.view.View"/>
+					<component class="android.view.ViewStub"/>
+					<component class="android.gesture.GestureOverlayView"/>
+					<component class="android.view.SurfaceView"/>
+					<component class="android.widget.NumberPicker"/>
+					<component class="android.widget.ZoomButton"/>
+					<component class="android.widget.ZoomControls"/>
+					<component class="android.widget.DialerFilter"/>
+					<component class="android.widget.AbsoluteLayout"/>
+				</category>
+			</palette>
+		</toolkit>
+	</extension>
+
+	<extension point="org.eclipse.wb.core.xml.descriptionProcessors">
+		<processor class="org.eclipse.wb.android.internal.parser.AndroidDescriptionProcessor"/>
+	</extension>
+
+
+	<!-- ======================================================== -->
+	<!-- PropertyEditor -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.xml.propertyEditors">
+		<configurableEditor 
+			class="org.eclipse.wb.android.internal.model.property.editor.FlagsPropertyEditor"
+			id="flags"/>
+	</extension>
+	
+	
+	<!-- ======================================================== -->
+	<!-- GEF factories -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.editPartFactories">
+		<factory class="org.eclipse.wb.android.internal.gef.EditPartFactory" priority="1"/>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- EditPart configurator -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.editPartConfigurators">
+		<configurator class="org.eclipse.wb.android.internal.gef.DeviceEditPartConfigurator"
+		/>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- GEF factories for TreeViewer -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.wb.core.treeEditPartFactories">
+		<factory class="org.eclipse.wb.android.internal.gefTree.EditPartFactory" priority="1"/>
+	</extension>
+
+	<extension point="org.eclipse.wb.core.treeEditPolicyFactories">
+		<factory class="org.eclipse.wb.android.internal.gefTree.LayoutEditPolicyFactory" priority="1"/>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- Rename refactoring participants -->
+	<!-- ======================================================== -->
+	<extension point="org.eclipse.ltk.core.refactoring.renameParticipants">
+		<renameParticipant
+			class="org.eclipse.wb.android.internal.refactoring.IncludeRenameParticipant"
+			id="org.eclipse.wb.android.refactoring.IncludeRenameParticipant"
+			name="Android UI resource rename participant">
+			<enablement>
+				<with variable="element">
+					<instanceof value="org.eclipse.core.resources.IFile"/>
+				</with>
+				<with variable="affectedNatures">
+					<iterate operator="or">
+						<equals value="com.android.ide.eclipse.adt.AndroidNature"/>
+					</iterate>
+				</with>
+			</enablement>
+		</renameParticipant>
+	</extension>
+
+	<!-- ======================================================== -->
+	<!-- New Wizards -->
+	<!-- ======================================================== -->
+	<!--<extension point="org.eclipse.ui.newWizards">
+		<category id="org.eclipse.wb.xwt" name="XWT"
+			parentCategory="org.eclipse.wb/org.eclipse.wb.rcp"/>
+		<wizard name="XWT Application" icon="icons/wizard/Application/wizard.gif"
+			category="org.eclipse.wb/org.eclipse.wb.rcp/org.eclipse.wb.xwt"
+			class="com.android.ide.eclipse.designer.internal.wizards.ApplicationWizard"
+			id="org.eclipse.wb.xwt.wizards.ApplicationWizard">
+			<description>Create XWT Application</description>
+		</wizard>
+		<wizard name="XWT Composite" icon="icons/wizard/Composite/wizard.gif"
+			category="org.eclipse.wb/org.eclipse.wb.rcp/org.eclipse.wb.xwt"
+			class="com.android.ide.eclipse.designer.internal.wizards.CompositeWizard"
+			id="org.eclipse.wb.xwt.wizards.CompositeWizard">
+			<description>Create XWT Composite</description>
+		</wizard>
+		<wizard name="XWT Forms Application" icon="icons/wizard/Application/wizard.gif"
+			category="org.eclipse.wb/org.eclipse.wb.rcp/org.eclipse.wb.xwt"
+			class="com.android.ide.eclipse.designer.internal.wizards.FormsApplicationWizard"
+			id="org.eclipse.wb.xwt.wizards.FormsApplicationWizard">
+			<description>Create XWT Forms Application</description>
+		</wizard>
+		<wizard name="XWT Forms Composite" icon="icons/wizard/Composite/wizard.gif"
+			category="org.eclipse.wb/org.eclipse.wb.rcp/org.eclipse.wb.xwt"
+			class="com.android.ide.eclipse.designer.internal.wizards.FormsCompositeWizard"
+			id="org.eclipse.wb.xwt.wizards.FormsCompositeWizard">
+			<description>Create XWT Forms Composite</description>
+		</wizard>
+	</extension> -->
+
+</plugin>

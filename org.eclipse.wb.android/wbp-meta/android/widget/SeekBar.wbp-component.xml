@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>A SeekBar is an extension of ProgressBar that adds a draggable thumb.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+</component>

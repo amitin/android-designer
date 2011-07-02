@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>This class is a calendar widget for displaying and selecting dates. The range of dates supported by this calendar is configurable. A user can select a date by taping on it and can scroll and fling the calendar to a desired date.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- CONSTRUCTORS -->
+	<constructors>
+	</constructors>
+	<!-- METHODS -->
+	<methods>
+	</methods>
+	<!-- PROPERTIES -->
+	<properties-preferred names="text"/>
+	<property-tag name="text" tag="isText" value="true"/>
+	<!-- MORPHING -->
+	<morphTargets>
+	</morphTargets>
+	<!-- PARAMETERS -->
+	<parameters>
+	</parameters>
+</component>

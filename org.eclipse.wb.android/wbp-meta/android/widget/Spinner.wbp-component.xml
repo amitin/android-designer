@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>A view that displays one child at a time and lets the user pick among them.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+</component>

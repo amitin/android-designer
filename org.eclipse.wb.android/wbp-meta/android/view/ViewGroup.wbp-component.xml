@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<x-model class="org.eclipse.wb.android.internal.model.widgets.ViewGroupInfo"/>
+</component>

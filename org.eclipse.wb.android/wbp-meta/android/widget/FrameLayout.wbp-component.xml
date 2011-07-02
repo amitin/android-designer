@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>FrameLayout is designed to block out an area on the screen to display a single item.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+	<!-- CONSTRUCTORS -->
+	<constructors>
+	</constructors>
+	<!-- METHODS -->
+	<methods>
+	</methods>
+	<!-- PROPERTIES -->
+	<!-- MORPHING -->
+	<morphTargets>
+	</morphTargets>
+	<!-- PARAMETERS -->
+	<parameters>
+	</parameters>
+</component>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exceptions>
+	<exception id="6001" title="Invalid state." warning="true">Invalid Android bridge state.</exception>
+	<exception id="6002" title="Unsuccessfull Android Bridge operation.">
+		An error occurred during Android Bridge invocation.<br>
+		Status: {0}<br>
+		Message: {1}<br>
+		See the stack trace for details.
+	</exception>
+</exceptions>

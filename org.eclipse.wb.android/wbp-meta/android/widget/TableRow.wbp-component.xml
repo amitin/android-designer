@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<x-model class="org.eclipse.wb.android.internal.model.layouts.table.TableRowInfo"/>
+	<description>A layout that arranges its children horizontally. A TableRow should always be used as a child of a TableLayout.</description>
+	<!-- CREATION -->
+	<creation>
+		<source/>
+	</creation>
+	<!-- PARAMETERS -->
+	<parameters>
+		<!-- new -->
+		<parameter name="emptyViewGroupText">Empty TableRow</parameter>
+		<!-- flow container -->
+		<parameter name="flowContainer">false</parameter>
+	</parameters>
+</component>

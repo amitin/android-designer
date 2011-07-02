@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<!-- PROPERTIES -->
+	<properties-normal names="android:layout_gravity"/>
+	<property id="android:layout_gravity">
+		<editor id="flags">
+			<parameter name="enum0">horizontal 0x07 left right center_horizontal fill_horizontal</parameter>
+			<parameter name="enum1">vertical 0x70 top bottom center_vertical fill_vertical</parameter>
+			<parameter name="macroUsingEquals0">both 0x77 center fill</parameter>
+			<parameter name="set">clip_horizontal clip_vertical</parameter>
+		</editor>
+	</property>
+</component>

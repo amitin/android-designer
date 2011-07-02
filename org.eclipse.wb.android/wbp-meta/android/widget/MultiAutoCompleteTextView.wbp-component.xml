@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>An editable text view, extending AutoCompleteTextView, that can show completion suggestions for the substring of the text where the user is typing instead of necessarily for the entire thing.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+		<x-attribute name="android:text" value="New MultiAutoCompleteTextView"/>
+	</creation>
+</component>

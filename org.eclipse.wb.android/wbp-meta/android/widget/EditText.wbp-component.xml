@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>EditText is a thin veneer over TextView that configures itself to be editable.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+		<x-attribute name="android:text" value="New EditText"/>
+	</creation>
+</component>

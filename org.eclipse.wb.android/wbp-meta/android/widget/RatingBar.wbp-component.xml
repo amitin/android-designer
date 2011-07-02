@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.eclipse.org/wb/WBPComponent">
+	<description>A RatingBar is an extension of SeekBar and ProgressBar that shows a rating in stars.</description>
+	<!-- CREATION -->
+	<creation>
+		<source></source>
+	</creation>
+</component>
