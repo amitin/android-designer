@@ -153,12 +153,14 @@ public final class DeviceManager {
   /**
    * Default metrics.
    */
-  public static final DisplayMetrics DEFAULT = new DisplayMetricsImpl(320, 480) {
-    @Override
-    public String getPrompt() {
-      return "default";
-    }
-  };
+  public static DisplayMetrics getMetricsDefault() {
+    return new DisplayMetricsImpl(320, 480) {
+      @Override
+      public String getPrompt() {
+        return "default";
+      }
+    };
+  }
 
   ////////////////////////////////////////////////////////////////////////////
   //
@@ -193,7 +195,7 @@ public final class DeviceManager {
         }
       }
     }
-    return DEFAULT;
+    return getMetricsDefault();
   }
 
   /**
