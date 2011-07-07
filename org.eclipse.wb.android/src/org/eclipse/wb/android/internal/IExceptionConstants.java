@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.wb.android.internal;
 
-import org.eclipse.wb.internal.core.utils.exception.DesignerException;
-
 /**
  * Constants for Android toolkit related {@link DesignerException}.
  * 
