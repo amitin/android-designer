@@ -443,7 +443,7 @@ public final class DeviceSelectionSupport implements IRootProcessor {
         menuItem.setMenu(subMenu);
         if (!StringUtils.isEmpty(themeInfo.fullName)) {
           final MenuItem selfMenuItem = new MenuItem(subMenu, SWT.NONE);
-          selfMenuItem.setText("<self>");
+          selfMenuItem.setText(themeInfo.name);
           selfMenuItem.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
               setTheme(rootObject, themeInfo.fullName);
@@ -525,7 +525,17 @@ public final class DeviceSelectionSupport implements IRootProcessor {
         ThemeMenuItemInfo themeInfo = rootThemeInfo.getTheme(themeName);
         themeInfo.fullName = themeName;
       }
-      return rootThemeInfo.children;
+      List<ThemeMenuItemInfo> rootChildren = rootThemeInfo.children;
+      if (rootChildren.isEmpty()) {
+        return rootChildren;
+      }
+      // remove single-child root menu and root 'Theme' item
+      List<ThemeMenuItemInfo> children = rootChildren.get(0).children;
+      rootThemeInfo = new ThemeMenuItemInfo();
+      rootThemeInfo.fullName = "Theme";
+      rootThemeInfo.name = "Theme";
+      children.add(0, rootThemeInfo);
+      return children;
     }
   }
 }
