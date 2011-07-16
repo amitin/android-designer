@@ -13,10 +13,12 @@ package org.eclipse.wb.android.internal.model.widgets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.eclipse.wb.android.internal.model.util.MorphingSupport;
 import org.eclipse.wb.android.internal.parser.AndroidEditorContext;
 import org.eclipse.wb.android.internal.parser.AndroidHierarchyBuilder;
 import org.eclipse.wb.android.internal.support.AndroidBridge;
 import org.eclipse.wb.core.model.ObjectInfo;
+import org.eclipse.wb.core.model.broadcast.ObjectEventListener;
 import org.eclipse.wb.draw2d.geometry.Insets;
 import org.eclipse.wb.draw2d.geometry.Rectangle;
 import org.eclipse.wb.internal.core.model.ObjectInfoVisitor;
@@ -30,8 +32,8 @@ import org.eclipse.wb.internal.core.xml.model.broadcast.XmlObjectAddProperties;
 import org.eclipse.wb.internal.core.xml.model.creation.CreationSupport;
 import org.eclipse.wb.internal.core.xml.model.description.ComponentDescription;
 
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
-
 
 import java.util.List;
 import java.util.Map;
@@ -69,6 +71,7 @@ public class ViewInfo extends AbstractComponentInfo {
    * Adds broadcast listeners.
    */
   private void addBroadcastListeners() {
+    // contribute layout properties
     addBroadcastListener(new XmlObjectAddProperties() {
       public void invoke(XmlObjectInfo object, List<Property> properties) throws Exception {
         if (object == m_this) {
@@ -76,6 +79,17 @@ public class ViewInfo extends AbstractComponentInfo {
           if (parent != null) {
             parent.addLayoutProperties(m_this, properties);
           }
+        }
+      }
+    });
+    // contribute context menu
+    addBroadcastListener(new ObjectEventListener() {
+      @Override
+      public void addContextMenu(List<? extends ObjectInfo> objects,
+          ObjectInfo object,
+          IMenuManager manager) throws Exception {
+        if (object == m_this) {
+          MorphingSupport.contribute(m_this, manager);
         }
       }
     });
