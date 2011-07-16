@@ -9,4 +9,12 @@
 	<properties-preferred names="android:textOn android:textOff"/>
 	<properties-hidden names="android:text"/>
 	<property-tag name="android:text" tag="isText" value="false"/>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.Button"/>
+		<morphTarget class="android.widget.RadioButton"/>
+		<morphTarget class="android.widget.CheckBox"/>
+		<morphTarget class="android.widget.TextView"/>
+	</morphTargets>
 </component>

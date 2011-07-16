@@ -9,6 +9,14 @@
 	<!-- PROPERTIES -->
 	<properties-preferred names="android:text"/>
 	<property-tag name="android:text" tag="isText" value="true"/>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.RadioButton"/>
+		<morphTarget class="android.widget.ToggleButton"/>
+		<morphTarget class="android.widget.CheckBox"/>
+		<morphTarget class="android.widget.TextView"/>
+	</morphTargets>
 	<!-- PARAMETERS -->
 	<parameters>
 		<parameter name="x.double-click.listener">onClick</parameter>

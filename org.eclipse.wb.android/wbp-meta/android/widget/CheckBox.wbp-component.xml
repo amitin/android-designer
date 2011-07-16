@@ -9,4 +9,13 @@
 	<!-- PROPERTIES -->
 	<properties-preferred names="android:text"/>
 	<property-tag name="android:text" tag="isText" value="true"/>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.Button"/>
+		<morphTarget class="android.widget.RadioButton"/>
+		<morphTarget class="android.widget.ToggleButton"/>
+		<morphTarget class="android.widget.CheckedTextView"/>
+		<morphTarget class="android.widget.TextView"/>
+	</morphTargets>
 </component>

@@ -3,13 +3,14 @@
 	<description>Displays text to the user and optionally allows to edit it.</description>
 	<!-- CREATION -->
 	<creation>
-		<source></source>
+		<source/>
 		<x-attribute name="android:text" value="New TextView"/>
 	</creation>
 	<!-- PROPERTIES -->
 	<properties-preferred names="android:text"/>
 	<properties-normal names="android:gravity"/>
-	<properties-advanced names="android:autoLink android:autoText android:bufferType android:cursorVisible android:drawableBottom android:drawableLeft android:drawablePadding android:drawableRight android:drawableTop android:editorExtras android:ems android:imeActionId android:imeActionLabel android:imeOptions android:includeFontPadding android:inputMethod android:lineSpacingExtra android:lineSpacingMultiplier android:linksClickable android:maxEms android:maxHeight android:maxLength android:maxLines android:maxWidth android:minEms android:minHeight android:minLines android:minWidth android:privateImeOptions android:scrollHorizontally android:shadowColor android:shadowDx android:shadowDy android:shadowRadius android:textColor android:textColorHighlight android:textColorHint android:textColorLink android:textScaleX android:textAppearance android:textEditNoPasteWindowLayout android:textEditPasteWindowLayout android:textEditSideNoPasteWindowLayout android:textEditSidePasteWindowLayout android:textSelectHandle android:textSelectHandleLeft android:textSelectHandleRight android:verticalScrollbarPosition android:overScrollMode android:freezesText"/>
+	<properties-advanced
+		names="android:autoLink android:autoText android:bufferType android:cursorVisible android:drawableBottom android:drawableLeft android:drawablePadding android:drawableRight android:drawableTop android:editorExtras android:ems android:imeActionId android:imeActionLabel android:imeOptions android:includeFontPadding android:inputMethod android:lineSpacingExtra android:lineSpacingMultiplier android:linksClickable android:maxEms android:maxHeight android:maxLength android:maxLines android:maxWidth android:minEms android:minHeight android:minLines android:minWidth android:privateImeOptions android:scrollHorizontally android:shadowColor android:shadowDx android:shadowDy android:shadowRadius android:textColor android:textColorHighlight android:textColorHint android:textColorLink android:textScaleX android:textAppearance android:textEditNoPasteWindowLayout android:textEditPasteWindowLayout android:textEditSideNoPasteWindowLayout android:textEditSidePasteWindowLayout android:textSelectHandle android:textSelectHandleLeft android:textSelectHandleRight android:verticalScrollbarPosition android:overScrollMode android:freezesText"/>
 	<properties-hidden names="android:textIsSelectable android:fadeScrollbars"/>
 	<property-tag name="android:text" tag="isText" value="true"/>
 	<property id="android:gravity">
@@ -24,14 +25,18 @@
 		<editor id="flags">
 			<parameter name="set">integer</parameter>
 			<parameter name="macroSet0">0x01 0x01 signed decimal</parameter>
-		</editor>		
+		</editor>
 	</property>
 	<property id="android:inputType">
 		<editor id="flags">
-			<parameter name="enum0">type 0xFF none text textUri textEmailAddress textEmailSubject textShortMessage textLongMessage textPersonName textPostalAddress textPassword textVisiblePassword textWebEditText textFilter textPhonetic textWebEmailAddress textWebPassword number numberPassword phone datetime date time</parameter>
-			<parameter name="macroSet0">0x01 0x0F textCapCharacters textCapWords textCapSentences textAutoCorrect textAutoComplete textMultiLine textImeMultiLine textNoSuggestions</parameter>
+			<parameter name="enum0">type 0xFF none text textUri textEmailAddress textEmailSubject
+				textShortMessage textLongMessage textPersonName textPostalAddress textPassword
+				textVisiblePassword textWebEditText textFilter textPhonetic textWebEmailAddress
+				textWebPassword number numberPassword phone datetime date time</parameter>
+			<parameter name="macroSet0">0x01 0x0F textCapCharacters textCapWords textCapSentences
+				textAutoCorrect textAutoComplete textMultiLine textImeMultiLine textNoSuggestions</parameter>
 			<parameter name="macroSet1">0x02 0x0F numberSigned numberDecimal</parameter>
-		</editor>		
+		</editor>
 		<defaultValue value="1"/>
 	</property>
 	<property id="android:autoLink">
@@ -47,4 +52,13 @@
 		<!-- getter returns incorrect value -->
 		<defaultValue value="0"/>
 	</property>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.EditText"/>
+		<morphTarget class="android.widget.CheckedTextView"/>
+		<morphTarget class="android.widget.AutoCompleteTextView"/>
+		<morphTarget class="android.widget.MultiAutoCompleteTextView"/>
+		<morphTarget class="android.widget.Button"/>
+	</morphTargets>
 </component>

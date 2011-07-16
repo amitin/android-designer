@@ -6,4 +6,12 @@
 		<source></source>
 		<x-attribute name="android:text" value="New MultiAutoCompleteTextView"/>
 	</creation>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.TextView"/>
+		<morphTarget class="android.widget.EditText"/>
+		<morphTarget class="android.widget.CheckedTextView"/>
+		<morphTarget class="android.widget.AutoCompleteTextView"/>
+	</morphTargets>
 </component>

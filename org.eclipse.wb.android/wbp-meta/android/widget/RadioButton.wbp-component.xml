@@ -6,4 +6,12 @@
 		<source></source>
 		<x-attribute name="android:text" value="New RadioButton"/>
 	</creation>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.Button"/>
+		<morphTarget class="android.widget.ToggleButton"/>
+		<morphTarget class="android.widget.CheckBox"/>
+		<morphTarget class="android.widget.TextView"/>
+	</morphTargets>
 </component>

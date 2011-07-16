@@ -6,4 +6,13 @@
 		<source></source>
 		<x-attribute name="android:text" value="New EditText"/>
 	</creation>
+	<!-- MORPHING -->
+	<morphTargets>
+		<noInherit/>
+		<morphTarget class="android.widget.TextView"/>
+		<morphTarget class="android.widget.CheckedTextView"/>
+		<morphTarget class="android.widget.AutoCompleteTextView"/>
+		<morphTarget class="android.widget.MultiAutoCompleteTextView"/>
+		<morphTarget class="android.widget.Button"/>
+	</morphTargets>
 </component>
