@@ -14,8 +14,6 @@ import org.eclipse.wb.draw2d.geometry.Rectangle;
 import org.eclipse.wb.gef.core.Command;
 import org.eclipse.wb.gef.graphical.handles.Handle;
 import org.eclipse.wb.gef.graphical.policies.SelectionEditPolicy;
-import org.eclipse.wb.internal.core.utils.Debug;
-
 
 import java.util.List;
 
@@ -64,16 +62,12 @@ public final class TableSelectionEditPolicy extends AbstractGridSelectionEditPol
   @Override
   protected List<Handle> createSelectionHandles() {
     List<Handle> handlesList = Lists.newArrayList();
-    // add move handle
     handlesList.add(createMoveHandle());
     // add span handles
     {
-      handlesList.add(createSpanHandle(IPositionConstants.NORTH, 0.25));
       handlesList.add(createSpanHandle(IPositionConstants.WEST, 0.25));
       handlesList.add(createSpanHandle(IPositionConstants.EAST, 0.75));
-      handlesList.add(createSpanHandle(IPositionConstants.SOUTH, 0.75));
     }
-    //
     return handlesList;
   }
 
@@ -111,10 +105,13 @@ public final class TableSelectionEditPolicy extends AbstractGridSelectionEditPol
   ////////////////////////////////////////////////////////////////////////////
   @Override
   protected Command createSpanCommand(final boolean horizontal, final Rectangle cells) {
+    if (!horizontal) {
+      return null;
+    }
     return new EditCommand(m_layout) {
       @Override
       protected void executeEdit() throws Exception {
-        Debug.println("span command");
+        m_layout.command_SPAN(m_component, cells);
       }
     };
   }

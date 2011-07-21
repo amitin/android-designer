@@ -12,9 +12,14 @@ package org.eclipse.wb.android.internal.gef.part;
 
 import org.eclipse.wb.android.internal.gef.policy.layouts.table.TableLayoutEditPolicy;
 import org.eclipse.wb.android.internal.model.layouts.table.TableLayoutInfo;
+import org.eclipse.wb.gef.core.EditPart;
+import org.eclipse.wb.gef.core.RequestProcessor;
+import org.eclipse.wb.gef.core.requests.ChangeBoundsRequest;
+import org.eclipse.wb.gef.core.requests.Request;
 import org.eclipse.wb.gef.graphical.GraphicalEditPart;
 import org.eclipse.wb.internal.core.xml.gef.part.AbstractComponentEditPart;
 
+import java.util.List;
 
 /**
  * {@link GraphicalEditPart} for {@link TableLayoutInfo}.
@@ -22,7 +27,7 @@ import org.eclipse.wb.internal.core.xml.gef.part.AbstractComponentEditPart;
  * @author mitin_aa
  * @coverage android.gef
  */
-public class TableLayoutEditPart extends AbstractComponentEditPart {
+public final class TableLayoutEditPart extends AbstractComponentEditPart {
   private final TableLayoutInfo layout;
 
   ////////////////////////////////////////////////////////////////////////////
@@ -33,6 +38,25 @@ public class TableLayoutEditPart extends AbstractComponentEditPart {
   public TableLayoutEditPart(TableLayoutInfo layout) {
     super(layout);
     this.layout = layout;
+    addRequestProcessor(new RequestProcessor() {
+      @Override
+      public Request process(EditPart editPart, Request req) throws Exception {
+        if (req instanceof ChangeBoundsRequest) {
+          ChangeBoundsRequest request = (ChangeBoundsRequest) req;
+          List<EditPart> editParts = request.getEditParts();
+          if (!editParts.isEmpty()) {
+            if (editParts.get(0).getParent().getParent() == editPart) {
+              request.setType(Request.REQ_MOVE);
+            } else {
+              request.setType(Request.REQ_ADD);
+            }
+            return request;
+          }
+        }
+        // do nothing
+        return req;
+      }
+    });
   }
 
   ////////////////////////////////////////////////////////////////////////////

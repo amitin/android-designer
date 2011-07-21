@@ -23,13 +23,12 @@ import org.eclipse.wb.gef.core.Command;
 import org.eclipse.wb.gef.core.EditPart;
 import org.eclipse.wb.gef.core.events.IEditPartListener;
 import org.eclipse.wb.gef.core.policies.EditPolicy;
+import org.eclipse.wb.gef.core.requests.ChangeBoundsRequest;
 import org.eclipse.wb.gef.core.requests.CreateRequest;
 import org.eclipse.wb.gef.graphical.GraphicalEditPart;
 import org.eclipse.wb.gef.graphical.policies.LayoutEditPolicy;
-import org.eclipse.wb.internal.core.utils.Debug;
 
 import org.eclipse.jface.action.IMenuManager;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +43,6 @@ public final class TableLayoutEditPolicy extends AbstractGridLayoutEditPolicy {
   private final TableLayoutInfo m_layout;
   private final IEditPartListener m_listener = new IEditPartListener() {
     public void childAdded(EditPart child, int index) {
-      Debug.println("   add: " + child.getModel());
       if (child.getModel() instanceof TableRowInfo) {
         child.addEditPartListener(m_listener);
       } else {
@@ -53,7 +51,7 @@ public final class TableLayoutEditPolicy extends AbstractGridLayoutEditPolicy {
     }
 
     public void removingChild(EditPart child, int index) {
-      Debug.println("remove: " + child.getModel());
+      child.removeEditPartListener(m_listener);
     }
   };
 
@@ -354,6 +352,28 @@ public final class TableLayoutEditPolicy extends AbstractGridLayoutEditPolicy {
               m_target.m_rowInsert);
         }
       };
+    }
+    return null;
+  }
+
+  @Override
+  protected Command getMoveCommand(ChangeBoundsRequest request) {
+    if (m_target.m_valid && request.getEditParts().size() == 1) {
+      EditPart moveEditPart = request.getEditParts().get(0);
+      if (moveEditPart.getModel() instanceof ViewInfo) {
+        final ViewInfo component = (ViewInfo) moveEditPart.getModel();
+        return new EditCommand(m_layout) {
+          @Override
+          protected void executeEdit() throws Exception {
+            m_layout.command_MOVE(
+                component,
+                m_target.m_column,
+                m_target.m_columnInsert,
+                m_target.m_row,
+                m_target.m_rowInsert);
+          }
+        };
+      }
     }
     return null;
   }
