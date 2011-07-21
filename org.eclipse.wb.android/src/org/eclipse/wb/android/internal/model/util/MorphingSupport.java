@@ -23,11 +23,8 @@ import org.eclipse.jface.action.IContributionManager;
 public class MorphingSupport<T extends ViewInfo>
     extends
       org.eclipse.wb.internal.core.xml.model.utils.MorphingSupport<T> {
-  ////////////////////////////////////////////////////////////////////////////
-  //
-  // Instance fields
-  //
-  ////////////////////////////////////////////////////////////////////////////
+  public static final String TOOLKIT_CLASS_NAME = "android.view.View";
+
   ////////////////////////////////////////////////////////////////////////////
   //
   // Constructor
@@ -51,6 +48,10 @@ public class MorphingSupport<T extends ViewInfo>
    *          the {@link IContributionManager} to add action to.
    */
   public static void contribute(ViewInfo view, IContributionManager manager) throws Exception {
-    contribute(new MorphingSupport<ViewInfo>("android.view.View", view), manager);
+    if (view.isRoot()) {
+      // TODO not supported yet
+      return;
+    }
+    contribute(new MorphingSupport<ViewInfo>(TOOLKIT_CLASS_NAME, view), manager);
   }
 }
