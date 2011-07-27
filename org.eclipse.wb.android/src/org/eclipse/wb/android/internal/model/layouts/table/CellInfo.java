@@ -20,7 +20,7 @@ import org.eclipse.wb.android.internal.model.widgets.ViewInfo;
  */
 final class CellInfo {
   ViewInfo view;
-  int span;
+  int span = 1;
   int row;
   int column;
   CellInfo spannedViewCell;
@@ -36,6 +36,12 @@ final class CellInfo {
 
   public boolean isSpanSpace() {
     return spannedViewCell != null;
+  }
+
+  public void clear() {
+    view = null;
+    spannedViewCell = null;
+    span = 1;
   }
 
   @Override

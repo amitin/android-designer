@@ -11,6 +11,7 @@
 package org.eclipse.wb.android.internal.model.layouts.table;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.eclipse.wb.android.internal.model.widgets.ViewInfo;
 import org.eclipse.wb.draw2d.geometry.Interval;
@@ -21,6 +22,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Android TableLayout model support.
@@ -114,7 +116,12 @@ public final class TableLayoutSupport {
 
   public ViewInfo getViewAt(int row, int column) {
     if (row < m_rows && column < m_columns) {
-      return m_cells[row][column].view;
+      CellInfo cell = m_cells[row][column];
+      if (cell.view != null) {
+        return cell.view;
+      } else if (cell.spannedViewCell != null) {
+        return cell.spannedViewCell.view;
+      }
     }
     return null;
   }
@@ -139,7 +146,7 @@ public final class TableLayoutSupport {
     CellInfo[] rowCells = m_cells[row];
     for (int columnIndex = column; columnIndex < rowCells.length; columnIndex++) {
       CellInfo cell = rowCells[columnIndex];
-      if (!cell.isEmpty()) {
+      if (cell.view != null) {
         return cell.view;
       }
     }
@@ -165,7 +172,7 @@ public final class TableLayoutSupport {
 
   ////////////////////////////////////////////////////////////////////////////
   //
-  // Insert
+  // Add/Insert
   //
   ////////////////////////////////////////////////////////////////////////////
   /**
@@ -226,6 +233,21 @@ public final class TableLayoutSupport {
     }
   }
 
+  /**
+   * Adds a view into given cell. Target cell must be existent and empty.
+   */
+  public void addView(ViewInfo newView, int row, int column) throws Exception {
+    addView0(newView, row, column);
+    optimize();
+  }
+
+  private void addView0(ViewInfo newView, int row, int column) throws Exception {
+    CellInfo rCell = m_cells[row][column];
+    rCell.view = newView;
+    TableLayoutUtils.setExplicitColumn(rCell.view, column);
+    m_viewCells.put(newView, rCell);
+  }
+
   ////////////////////////////////////////////////////////////////////////////
   //
   // Remove
@@ -238,12 +260,20 @@ public final class TableLayoutSupport {
    *          A view to remove.
    */
   public void deleteView(ViewInfo view) throws Exception {
-    CellInfo cell = m_viewCells.get(view);
-    cell.view = null;
+    deleteView0(view);
+    optimize();
+  }
+
+  private void deleteView0(ViewInfo view) throws Exception {
+    CellInfo cell = m_viewCells.remove(view);
     int row = cell.row;
-    int column = cell.column + 1;
-    // set explicit column for right neighbor
-    preserveColumn(row, column);
+    // get next cell at this cell's span end to preserve column if it is not empty.
+    int endColumn = cell.column + cell.span;
+    preserveColumn(row, endColumn);
+    // clear cells
+    for (int column = cell.column; column < endColumn; ++column) {
+      m_cells[row][column].clear();
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -264,17 +294,7 @@ public final class TableLayoutSupport {
   public void setSpan(ViewInfo view, int startColumn, int spanLength) throws Exception {
     CellInfo cell = m_viewCells.get(view);
     int row = cell.row;
-    // get next cell at this cell's span end to preserve column if it is not empty.
-    int endColumn = cell.column + cell.span;
-    preserveColumn(row, endColumn);
-    // clear cells
-    int currentSpan = cell.span;
-    for (int column = cell.column; column < cell.column + currentSpan; ++column) {
-      CellInfo toClear = m_cells[row][column];
-      toClear.view = null;
-      toClear.spannedViewCell = null;
-      toClear.span = 1;
-    }
+    deleteView0(view);
     // set span
     cell = m_cells[row][startColumn];
     cell.view = view;
@@ -282,9 +302,71 @@ public final class TableLayoutSupport {
     for (int column = cell.column + 1; column < cell.column + cell.span; ++column) {
       m_cells[row][column].spannedViewCell = cell;
     }
+    // store cell
+    m_viewCells.put(view, cell);
     // explicitly set the column & span
     TableLayoutUtils.setExplicitColumn(view, startColumn);
     TableLayoutUtils.setSpanValue(view, spanLength);
+    // do optimize
+    optimize();
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  //
+  // Move
+  //
+  ////////////////////////////////////////////////////////////////////////////
+  /**
+   * Moves a view into target cell. Attempts to keep span if possible.
+   */
+  public void move(ViewInfo view, int row, int column) throws Exception {
+    CellInfo cell = m_viewCells.get(view);
+    int currentSpan = cell.span;
+    deleteView0(view);
+    addView0(view, row, column);
+    // attempt to keep span
+    cell = m_viewCells.get(view);
+    for (int c = cell.column + 1; c < cell.column + currentSpan; ++c) {
+      if (c < m_columns) {
+        CellInfo checkCell = m_cells[cell.row][c];
+        if (checkCell.view == null) {
+          cell.span++;
+          checkCell.spannedViewCell = cell;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+    TableLayoutUtils.setSpanValue(view, cell.span);
+    // optimize
+    optimize();
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  //
+  // Optimizations
+  //
+  ////////////////////////////////////////////////////////////////////////////
+  /**
+   * <pre>
+   * 1. Removes unneeded explicitly defined column values;
+   * 2. Removes empty rows/columns;
+   * 3. Eliminates span space and/or corrects columns numbers which don't affect the layout.</pre>
+   */
+  private void optimize() throws Exception {
+    // step 1: remove empty rows/columns
+    Set<Integer> nonEmptyRows = Sets.newHashSet();
+    Set<Integer> nonEmptyColumns = Sets.newHashSet();
+    for (int row = 0; row < m_rows; ++row) {
+      for (int column = 0; column < m_columns; ++column) {
+        if (m_cells[row][column].view != null) {
+          nonEmptyRows.add(row);
+          nonEmptyColumns.add(column);
+        }
+      }
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////
