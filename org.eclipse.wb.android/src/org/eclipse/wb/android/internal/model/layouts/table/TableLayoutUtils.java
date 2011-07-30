@@ -105,8 +105,8 @@ final class TableLayoutUtils {
   /**
    * Removes 'column' layout param value.
    */
-  public static void removeExplicitColumn(ViewGroupInfo parentRow, ViewInfo viewInfo)
-      throws Exception {
+  public static void removeExplicitColumn(ViewInfo viewInfo) throws Exception {
+    ViewGroupInfo parentRow = (ViewGroupInfo) viewInfo.getParent();
     Property columnProperty = parentRow.getLayoutPropertyByTitle(viewInfo, "column");
     if (columnProperty != null) {
       columnProperty.setValue(Property.UNKNOWN_VALUE);

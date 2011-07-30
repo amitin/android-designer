@@ -142,8 +142,12 @@ public class TableLayoutInfo extends LinearLayoutInfo {
       insertRow(row);
     }
     // append rows
-    while (m_layoutSupport.getRowCount() <= row) {
+    while (m_layoutSupport.getRowCount() - 1 < row) {
       insertRow(m_layoutSupport.getRowCount());
+    }
+    // append columns
+    while (m_layoutSupport.getColumnCount() - 1 < column) {
+      insertColumn(m_layoutSupport.getColumnCount());
     }
   }
 
