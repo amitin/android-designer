@@ -10,7 +10,15 @@
  *******************************************************************************/
 package org.eclipse.wb.android.internal.gef.policy.layouts.table;
 
+import com.google.common.collect.Lists;
+
+import org.eclipse.wb.android.internal.gef.policy.layouts.table.header.layout.ColumnsLayoutEditPolicy;
+import org.eclipse.wb.android.internal.gef.policy.layouts.table.header.layout.RowsLayoutEditPolicy;
+import org.eclipse.wb.android.internal.gef.policy.layouts.table.header.part.ColumnHeaderEditPart;
+import org.eclipse.wb.android.internal.gef.policy.layouts.table.header.part.RowHeaderEditPart;
 import org.eclipse.wb.android.internal.model.layouts.table.TableLayoutInfo;
+import org.eclipse.wb.android.internal.model.layouts.table.TableLayoutInfo.HeaderInfo;
+import org.eclipse.wb.android.internal.model.layouts.table.TableLayoutSupport;
 import org.eclipse.wb.android.internal.model.layouts.table.TableRowInfo;
 import org.eclipse.wb.android.internal.model.widgets.ViewInfo;
 import org.eclipse.wb.core.gef.command.EditCommand;
@@ -30,7 +38,6 @@ import org.eclipse.wb.gef.graphical.policies.LayoutEditPolicy;
 
 import org.eclipse.jface.action.IMenuManager;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -314,18 +321,6 @@ public final class TableLayoutEditPolicy extends AbstractGridLayoutEditPolicy {
     return new int[]{visualGap, x1, x2, x1 - minGap, x2 + minGap};
   }
 
-  public LayoutEditPolicy getContainerLayoutPolicy(boolean horizontal) {
-    return null;
-  }
-
-  public List<?> getHeaders(boolean horizontal) {
-    return Collections.EMPTY_LIST;
-  }
-
-  public EditPart createHeaderEditPart(boolean horizontal, Object model) {
-    return null;
-  }
-
   public void buildContextMenu(IMenuManager manager, boolean horizontal) {
   }
 
@@ -376,5 +371,36 @@ public final class TableLayoutEditPolicy extends AbstractGridLayoutEditPolicy {
       }
     }
     return null;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  //
+  // IHeadersProvider 
+  //
+  ////////////////////////////////////////////////////////////////////////////
+  public LayoutEditPolicy getContainerLayoutPolicy(boolean horizontal) {
+    if (horizontal) {
+      return new ColumnsLayoutEditPolicy(this, m_layout);
+    } else {
+      return new RowsLayoutEditPolicy(this, m_layout);
+    }
+  }
+
+  public List<?> getHeaders(boolean horizontal) {
+    TableLayoutSupport layoutSupport = m_layout.getLayoutSupport();
+    List<TableLayoutInfo.HeaderInfo> headers = Lists.newArrayList();
+    int count = horizontal ? layoutSupport.getColumnCount() : layoutSupport.getRowCount();
+    for (int index = 0; index < count; ++index) {
+      headers.add(new TableLayoutInfo.HeaderInfo(index));
+    }
+    return headers;
+  }
+
+  public EditPart createHeaderEditPart(boolean horizontal, Object model) {
+    if (horizontal) {
+      return new ColumnHeaderEditPart(m_layout, (HeaderInfo) model, getHostFigure());
+    } else {
+      return new RowHeaderEditPart(m_layout, (HeaderInfo) model, getHostFigure());
+    }
   }
 }

@@ -282,6 +282,84 @@ public final class TableLayoutSupport {
     }
   }
 
+  /**
+   * Removes single column.
+   * 
+   * @param column
+   *          a column number to remove.
+   */
+  public void deleteColumn(int column) throws Exception {
+    // remove views
+    for (int row = 0; row < m_rows; ++row) {
+      CellInfo cell = m_cells[row][column];
+      ViewInfo view = cell.view;
+      if (view != null) {
+        m_layout.deleteView0(view);
+      }
+    }
+    // remove column from model
+    removeColumn(column);
+    optimize();
+  }
+
+  /**
+   * Removes single column.
+   * 
+   * @param column
+   *          a column number to remove.
+   */
+  private void removeColumn(int column) throws Exception {
+    for (int row = 0; row < m_rows; ++row) {
+      CellInfo cell = m_cells[row][column];
+      // remove a cell from row cells
+      m_cells[row] = (CellInfo[]) ArrayUtils.remove(m_cells[row], column);
+      // shrink span, as TableLayout cannot keep span thru empty column 
+      if (cell.isSpanSpace()) {
+        cell.spannedViewCell.span--;
+        TableLayoutUtils.setSpanValue(cell.spannedViewCell.view, cell.spannedViewCell.span);
+      } else {
+        // find a next cell with view to right to adjust the column number
+        boolean prevEmpty = true;
+        for (int c = column; c < m_columns - 1; ++c) {
+          CellInfo rightCell = m_cells[row][c];
+          if (!rightCell.isEmpty()) {
+            if (prevEmpty) {
+              // set explicit column
+              TableLayoutUtils.setExplicitColumn(rightCell.view, c);
+            }
+            prevEmpty = false;
+          } else {
+            prevEmpty = true;
+          }
+        }
+      }
+    }
+    m_columns--;
+  }
+
+  /**
+   * Removes single row.
+   * 
+   * @param row
+   *          a row number to remove.
+   */
+  public void deleteRow(int row) throws Exception {
+    removeRow(row);
+    optimize();
+  }
+
+  /**
+   * Removes single row.
+   * 
+   * @param row
+   *          a row number to remove.
+   */
+  private void removeRow(int row) throws Exception {
+    m_cells = (CellInfo[][]) ArrayUtils.remove(m_cells, row);
+    m_layout.deleteRow0(row);
+    m_rows--;
+  }
+
   ////////////////////////////////////////////////////////////////////////////
   //
   // Span
@@ -380,13 +458,11 @@ public final class TableLayoutSupport {
     for (int row = m_rows - 1; row >= 0; --row) {
       if (!nonEmptyRows.contains(row)) {
         removeRow(row);
-        m_rows--;
       }
     }
     for (int column = m_columns - 1; column >= 0; --column) {
       if (!nonEmptyColumns.contains(column)) {
         removeColumn(column);
-        m_columns--;
       }
     }
     // at this point there should not be empty columns, so 
@@ -410,51 +486,6 @@ public final class TableLayoutSupport {
         }
       }
     }
-  }
-
-  /**
-   * Removes single column.
-   * 
-   * @param column
-   *          a column number to remove.
-   */
-  private void removeColumn(int column) throws Exception {
-    for (int row = 0; row < m_rows; ++row) {
-      CellInfo cell = m_cells[row][column];
-      // remove a cell from row cells
-      m_cells[row] = (CellInfo[]) ArrayUtils.remove(m_cells[row], column);
-      // shrink span, as TableLayout cannot keep span thru empty column 
-      if (cell.isSpanSpace()) {
-        cell.spannedViewCell.span--;
-        TableLayoutUtils.setSpanValue(cell.spannedViewCell.view, cell.spannedViewCell.span);
-      } else {
-        // find a next cell with view to right to adjust the column number
-        boolean prevEmpty = true;
-        for (int c = column; c < m_columns - 1; ++c) {
-          CellInfo rightCell = m_cells[row][c];
-          if (!rightCell.isEmpty()) {
-            if (prevEmpty) {
-              // set explicit column
-              TableLayoutUtils.setExplicitColumn(rightCell.view, c);
-            }
-            prevEmpty = false;
-          } else {
-            prevEmpty = true;
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Removes single row.
-   * 
-   * @param row
-   *          a row number to remove.
-   */
-  private void removeRow(int row) throws Exception {
-    m_cells = (CellInfo[][]) ArrayUtils.remove(m_cells, row);
-    m_layout.deleteRow0(row);
   }
 
   ////////////////////////////////////////////////////////////////////////////

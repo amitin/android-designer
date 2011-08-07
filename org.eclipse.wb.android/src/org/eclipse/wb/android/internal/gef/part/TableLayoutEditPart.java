@@ -14,6 +14,7 @@ import org.eclipse.wb.android.internal.gef.policy.layouts.table.TableLayoutEditP
 import org.eclipse.wb.android.internal.model.layouts.table.TableLayoutInfo;
 import org.eclipse.wb.gef.core.EditPart;
 import org.eclipse.wb.gef.core.RequestProcessor;
+import org.eclipse.wb.gef.core.policies.EditPolicy;
 import org.eclipse.wb.gef.core.requests.ChangeBoundsRequest;
 import org.eclipse.wb.gef.core.requests.Request;
 import org.eclipse.wb.gef.graphical.GraphicalEditPart;
@@ -67,6 +68,6 @@ public final class TableLayoutEditPart extends AbstractComponentEditPart {
   @Override
   protected void createEditPolicies() {
     super.createEditPolicies();
-    installEditPolicy(new TableLayoutEditPolicy(layout));
+    installEditPolicy(EditPolicy.LAYOUT_ROLE, new TableLayoutEditPolicy(layout));
   }
 }

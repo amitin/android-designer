@@ -36,6 +36,7 @@ import java.util.List;
  * @coverage android.model
  */
 public class TableLayoutInfo extends LinearLayoutInfo {
+  private TableLayoutSupport m_layoutSupport;
   private IGridInfo m_gridInfo;
 
   ////////////////////////////////////////////////////////////////////////////
@@ -52,7 +53,7 @@ public class TableLayoutInfo extends LinearLayoutInfo {
       public void after(ObjectInfo parent, ObjectInfo child) throws Exception {
         if (parent instanceof TableRowInfo) {
           TableRowInfo parentRow = (TableRowInfo) parent;
-          if (parentRow.getParent() == TableLayoutInfo.this) {
+          if (parentRow.getParent() == TableLayoutInfo.this && !parentRow.isDeleting()) {
             deleteView((ViewInfo) child);
           }
         }
@@ -78,7 +79,7 @@ public class TableLayoutInfo extends LinearLayoutInfo {
   }
 
   /**
-   * @return
+   * @return the {@link IGridInfo} instance for policy.
    */
   public IGridInfo getGridInfo() {
     if (m_gridInfo == null) {
@@ -116,16 +117,6 @@ public class TableLayoutInfo extends LinearLayoutInfo {
   // Columns/Rows
   //
   ////////////////////////////////////////////////////////////////////////////
-  private TableLayoutSupport m_layoutSupport;
-
-  public boolean isEmptyRow(int index) {
-    return false;
-  }
-
-  public boolean isEmptyColumn(int index) {
-    return false;
-  }
-
   private TableRowInfo getRowObjectInfo(int row) {
     List<TableRowInfo> rows = getChildrenRows();
     // the row object should exist at this moment
@@ -186,7 +177,15 @@ public class TableLayoutInfo extends LinearLayoutInfo {
   }
 
   /**
-   * Deletes a row from xml, doesn't update layout model.
+   * Deletes a ViewInfo from hierarchy, doesn't update layout model. Note: invoked from layout model
+   * itself.
+   */
+  void deleteView0(ViewInfo view) throws Exception {
+    view.delete();
+  }
+
+  /**
+   * Deletes a row from xml, doesn't update layout model. Note: invoked from layout model itself.
    */
   void deleteRow0(int row) throws Exception {
     List<TableRowInfo> rows = getChildrenRows();
@@ -245,5 +244,37 @@ public class TableLayoutInfo extends LinearLayoutInfo {
     ViewInfo referenceView = m_layoutSupport.getNextViewAt(row, column);
     XmlObjectUtils.move(view, Associations.direct(), referenceRow, referenceView);
     m_layoutSupport.move(view, row, column);
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  //
+  // Access
+  //
+  ////////////////////////////////////////////////////////////////////////////
+  /**
+   * @return the {@link TableLayoutSupport} instance.
+   */
+  public TableLayoutSupport getLayoutSupport() {
+    return m_layoutSupport;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  //
+  // Inner classes
+  //
+  ////////////////////////////////////////////////////////////////////////////
+  /**
+   * A model for headers.
+   */
+  public static final class HeaderInfo {
+    private final int m_index;
+
+    public HeaderInfo(int index) {
+      m_index = index;
+    }
+
+    public int getIndex() {
+      return m_index;
+    }
   }
 }
