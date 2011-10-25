@@ -393,7 +393,9 @@ public final class AndroidBridge {
         // if it's a project style, we check this is a theme.
         value = styleMap.get(parentStyle);
         if (value != null) {
-          return isTheme(value, styleMap);
+          return false;
+          // FIXME: causes StackOE with Android 14
+          //return isTheme(value, styleMap);
         }
       }
     }
