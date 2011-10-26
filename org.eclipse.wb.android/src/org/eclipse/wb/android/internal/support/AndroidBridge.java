@@ -293,6 +293,11 @@ public final class AndroidBridge {
     return manager.getProjectResources(m_project);
   }
 
+  /**
+   * See
+   * {@link com.android.ide.eclipse.adt.internal.editors.layout.configuration.ConfigurationComposite#updateThemes()}
+   * 
+   */
   public List<String> getThemes() {
     ArrayList<String> themes = Lists.newArrayList();
     FolderConfiguration config = getConfig();
@@ -310,18 +315,36 @@ public final class AndroidBridge {
     }
       // TODO
     }*/
-    // get the themes from the Framework.
-    {
-      Map<ResourceType, Map<String, ResourceValue>> resources = getFrameworkResources(config);
-      if (resources != null) {
-        themes.addAll(extractThemes(resources));
-      }
-    }
     // get the themes from the project.
     {
       Map<ResourceType, Map<String, ResourceValue>> resources = getProjectResources(config);
       if (resources != null) {
-        themes.addAll(extractThemes(resources));
+        // get the styles.
+        Map<String, ResourceValue> styles = resources.get(ResourceType.STYLE);
+        if (styles != null) {
+          // collect the themes out of all the styles, ie styles that extend,
+          // directly or indirectly a platform theme.
+          for (ResourceValue value : styles.values()) {
+            if (isTheme(value, styles)) {
+              themes.add(value.getName());
+            }
+          }
+        }
+      }
+    }
+    // get the themes from the Framework.
+    {
+      Map<ResourceType, Map<String, ResourceValue>> resources = getFrameworkResources(config);
+      if (resources != null) {
+        // get the styles.
+        Map<String, ResourceValue> styles = resources.get(ResourceType.STYLE);
+        // collect the themes out of all the styles.
+        for (ResourceValue value : styles.values()) {
+          String name = value.getName();
+          if (name.startsWith("Theme.") || name.equals("Theme")) {
+            themes.add(value.getName());
+          }
+        }
       }
     }
     // sort themes
@@ -347,20 +370,20 @@ public final class AndroidBridge {
       return defaultTheme;
     return null;
   }*/
-  private List<String> extractThemes(Map<ResourceType, Map<String, ResourceValue>> resources) {
-    ArrayList<String> themes = Lists.newArrayList();;
-    Map<String, ResourceValue> styles = resources.get(ResourceType.STYLE);
-    if (styles != null) {
-      // collect the themes out of all the styles.
-      for (ResourceValue value : styles.values()) {
-        if (isTheme(value, styles)) {
-          themes.add(value.getName());
-        }
-      }
-    }
-    return themes;
-  }
-
+  /**
+   * Returns whether the given <var>style</var> is a theme. This is done by making sure the parent
+   * is a theme.
+   * 
+   * See {@link
+   * com.android.ide.eclipse.adt.internal.editors.layout.configuration.ConfigurationComposite#
+   * isTheme(ResourceValue, Map<String, ResourceValue>)}
+   * 
+   * @param value
+   *          the style to check
+   * @param styleMap
+   *          the map of styles for the current project. Key is the style name.
+   * @return True if the given <var>style</var> is a theme.
+   */
   private boolean isTheme(ResourceValue value, Map<String, ResourceValue> styleMap) {
     String ANDROID_NS_NAME_PREFIX = "android:";
     String name = value.getName();
@@ -393,9 +416,7 @@ public final class AndroidBridge {
         // if it's a project style, we check this is a theme.
         value = styleMap.get(parentStyle);
         if (value != null) {
-          return false;
-          // FIXME: causes StackOE with Android 14
-          //return isTheme(value, styleMap);
+          return isTheme(value, styleMap);
         }
       }
     }
