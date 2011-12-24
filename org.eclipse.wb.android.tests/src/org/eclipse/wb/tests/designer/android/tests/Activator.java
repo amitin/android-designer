@@ -8,7 +8,7 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.android.tests.designer.tests;
+package org.eclipse.wb.tests.designer.android.tests;
 
 import java.io.InputStream;
 
