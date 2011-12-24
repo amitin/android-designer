@@ -478,7 +478,7 @@ public final class AndroidBridge {
     return m_context;
   }
 
-  public Sdk getSdk() {
+  public static Sdk getSdk() {
     waitLoad(new RunnableObjectEx<LoadStatus>() {
       public LoadStatus runObject() throws Exception {
         return AdtPlugin.getDefault().getSdkLoadStatus();
@@ -603,7 +603,7 @@ public final class AndroidBridge {
    * 
    * // FIXME: use better way waiting for sdk to load.
    */
-  private void waitLoad(RunnableObjectEx<LoadStatus> loadStatusGetter) {
+  private static void waitLoad(RunnableObjectEx<LoadStatus> loadStatusGetter) {
     boolean error = false;
     try {
       long timeout = 2 * 60 * 1000;
