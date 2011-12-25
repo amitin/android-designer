@@ -14,14 +14,18 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.wb.android.internal.model.widgets.ViewInfo;
+import org.eclipse.wb.android.internal.parser.AndroidEditorContext;
+import org.eclipse.wb.android.internal.parser.AndroidParser;
 import org.eclipse.wb.android.internal.support.AndroidBridge;
 import org.eclipse.wb.internal.core.model.description.ToolkitDescription;
-import org.eclipse.wb.internal.core.model.variable.NamesManager;
-import org.eclipse.wb.internal.core.model.variable.NamesManager.ComponentNameDescription;
 import org.eclipse.wb.internal.core.utils.jdt.core.CodeUtils;
 import org.eclipse.wb.internal.core.xml.model.XmlObjectInfo;
 import org.eclipse.wb.tests.designer.XML.model.AbstractXmlModelTest;
@@ -32,7 +36,6 @@ import com.android.ide.eclipse.adt.internal.wizards.newproject.NewProjectCreator
 import com.android.ide.eclipse.adt.internal.wizards.newproject.NewProjectWizardState;
 import com.android.ide.eclipse.adt.internal.wizards.newproject.NewProjectWizardState.Mode;
 import com.android.sdklib.IAndroidTarget;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Abstract super class for Android tests.
@@ -40,7 +43,8 @@ import com.google.common.collect.ImmutableList;
  * @author sablin_aa
  */
 public abstract class AndroidModelTest extends AbstractXmlModelTest {
-	protected boolean m_getSource_includeStandardNamespaces;
+	public static final String PACKAGE_NAME = "wb.test";
+	public static final String RES_PATH = "res/layout";
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Life cycle
@@ -50,7 +54,6 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		//configureForTestPreferences(RcpToolkitDescription.INSTANCE);
-		m_getSource_includeStandardNamespaces = true;
 	}
 	@Override
 	protected void tearDown() throws Exception {
@@ -81,7 +84,7 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 						projectValues.projectLocation = new File(locationString);
 					}
 					projectValues.applicationName = projectValues.projectName;
-					projectValues.packageName = "wb.test";
+					projectValues.packageName = PACKAGE_NAME;
 					projectValues.packageNameModifiedByUser = true;
 					projectValues.activityName = projectValues.projectName + "Activity";
 					projectValues.createActivity = true;
@@ -106,6 +109,7 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 			}
 			m_testProject = new TestProject(m_project);
 			m_javaProject = m_testProject.getJavaProject();
+			waitForAutoBuild();
 		}
 	}
 	/**
@@ -114,12 +118,7 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	@Override
 	protected void configureNewProject() throws Exception {
 		/*BTestUtils.configure(m_testProject);
-		m_testProject.addPlugin("com.ibm.icu");
 		m_testProject.addPlugin("org.eclipse.core.databinding");
-		m_testProject.addPlugin("org.eclipse.core.databinding.beans");
-		m_testProject.addPlugin("org.eclipse.core.databinding.observable");
-		m_testProject.addPlugin("org.eclipse.core.databinding.property");
-		m_testProject.addPlugin("org.eclipse.jface.databinding");
 		m_testProject.addBundleJars("org.eclipse.wb.xwt", "lib");*/
 	}
 	@SuppressWarnings("restriction")
@@ -152,10 +151,10 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	 * Configures default values for toolkit preferences.
 	 */
 	protected void configureDefaultPreferences(ToolkitDescription toolkit) {
-		//IPreferenceStore preferences = toolkit.getPreferences();
-		//preferences.setToDefault(org.eclipse.wb.internal.swt.preferences.IPreferenceConstants.P_LAYOUT_DATA_NAME_TEMPLATE);
-		//preferences.setToDefault(org.eclipse.wb.internal.swt.preferences.IPreferenceConstants.P_LAYOUT_NAME_TEMPLATE);
-		NamesManager.setNameDescriptions(toolkit, ImmutableList.<ComponentNameDescription>of());
+		/*IPreferenceStore preferences = toolkit.getPreferences();
+		preferences.setToDefault(org.eclipse.wb.internal.swt.preferences.IPreferenceConstants.P_LAYOUT_DATA_NAME_TEMPLATE);
+		preferences.setToDefault(org.eclipse.wb.internal.swt.preferences.IPreferenceConstants.P_LAYOUT_NAME_TEMPLATE);
+		NamesManager.setNameDescriptions(toolkit, ImmutableList.<ComponentNameDescription>of());*/
 	}
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -164,19 +163,18 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	////////////////////////////////////////////////////////////////////////////
 	@Override
 	protected String getJavaSourceToAssert() {
-		return getFileContentSrc("test/Test.java");
+		return getFileContentSrc(PACKAGE_NAME + "/Test.java");
 	}
 	@Override
 	protected String[] getJavaSource_decorate(String... lines) {
-		lines = CodeUtils.join(new String[]{"package test;"/*,
-															"import org.eclipse.swt.SWT;",
-															"import org.eclipse.swt.events.*;",
-															"import org.eclipse.swt.graphics.*;",
-															"import org.eclipse.swt.widgets.*;",
-															"import org.eclipse.swt.layout.*;",
-															"import org.eclipse.swt.custom.*;",
-															"import org.eclipse.jface.layout.*;",
-															"import org.eclipse.jface.viewers.*;"*/}, lines);
+		lines =
+				CodeUtils.join(new String[]{
+						"package " + PACKAGE_NAME + ";",
+						"import android.app.Activity;",
+						"import android.os.Bundle;",
+						"import android.view.View;",
+						"import android.view.ViewGroup;",
+						"import android.view.ViewParent;"}, lines);
 		return lines;
 	}
 	////////////////////////////////////////////////////////////////////////////
@@ -185,36 +183,29 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	//
 	////////////////////////////////////////////////////////////////////////////
 	/**
-	 * @return the {@link XmlObjectInfo} for parsed XWT source, in "src/test/Text.xwt" file.
+	 * @return the {@link XmlObjectInfo} for parsed XML source, in "res/layout/Text.xml" file.
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	protected final <T extends XmlObjectInfo> T parse(String... lines) throws Exception {
 		String source = getTestSource(lines);
-		return (T) parse0("test/Test.xwt", source);
+		return (T) parse0(RES_PATH + "/test.xml", source);
 	}
 	/**
-	 * Parses XWT file with given path and content.
+	 * Parses XML resource file with given path and content.
 	 */
 	protected final XmlObjectInfo parse0(String path, String content) throws Exception {
-		/*IFile file = setFileContentSrc(path, content);
+		IFile file = setFileContent(path, content);
 		IDocument document = new Document(content);
-		XwtParser parser = new XwtParser(file, document);
-		m_lastObject = parser.parse();
-		m_lastContext = m_lastObject.getContext();
-		m_lastLoader = m_lastContext.getClassLoader();*/
+	    AndroidEditorContext context = new AndroidEditorContext(file, document);
+	    m_lastObject = new AndroidParser(context).parse();
+	    m_lastContext = m_lastObject.getContext();
+		m_lastLoader = m_lastContext.getClassLoader();
 		return m_lastObject;
 	}
 	@Override
 	protected String getTestSource_namespaces() {
-		/*if (m_getSource_includeStandardNamespaces) {
-		  return " xmlns:wbp='http://www.eclipse.org/wb/xwt'"
-		      + " xmlns:t='clr-namespace:test'"
-		      + " xmlns='http://www.eclipse.org/xwt/presentation'"
-		      + " xmlns:x='http://www.eclipse.org/xwt'";
-		} else */{
-			return StringUtils.EMPTY;
-		}
+		return StringUtils.EMPTY;
 	}
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -222,19 +213,12 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	//
 	////////////////////////////////////////////////////////////////////////////
 	/**
-	 * @return {@link ViewInfo} for {@link Button} with text.
+	 * @return {@link ViewInfo} for {@link android.widget.Button} with text.
 	 */
-	/*protected final ControlInfo createButtonWithText() throws Exception {
-	  String componentClassName = "org.eclipse.swt.widgets.Button";
+	protected final ViewInfo createButton() throws Exception {
+	  String componentClassName = "android.widget.Button";
 	  return createObject(componentClassName);
-	}*/
-	/**
-	 * @return {@link ViewInfo} for {@link Button} without text.
-	 */
-	/*protected final ControlInfo createButton() throws Exception {
-	  String componentClassName = "org.eclipse.swt.widgets.Button";
-	  return createObject(componentClassName, "empty");
-	}*/
+	}
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// test.MyComponent support
