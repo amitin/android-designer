@@ -8,26 +8,22 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.tests.designer.android;
+package org.eclipse.wb.tests.designer.android.model;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.wb.tests.designer.android.gef.GefTests;
-import org.eclipse.wb.tests.designer.android.model.ModelTests;
 import org.eclipse.wb.tests.designer.core.DesignerSuiteTests;
 
 /**
- * All Android tests.
+ * Android model tests.
  * 
  * @author sablin_aa
  */
-public class AndroidTests extends DesignerSuiteTests {
+public class ModelTests extends DesignerSuiteTests {
 	public static Test suite() {
-		TestSuite suite = new TestSuite("org.eclipse.wb.android");
-		//suite.addTest(createSingleSuite(TestProjectTest.class));
-		suite.addTest(ModelTests.suite());
-		suite.addTest(GefTests.suite());
+		TestSuite suite = new TestSuite("org.eclipse.wb.android.model");
+		suite.addTest(createSingleSuite(TestProjectTest.class));
 		return suite;
 	}
 }

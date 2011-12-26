@@ -479,8 +479,7 @@ public final class DeviceManager {
   // Device image 
   //
   ////////////////////////////////////////////////////////////////////////////
-  private static final QualifiedName KEY_SKIN =
-      new QualifiedName(Activator.PLUGIN_ID, "deviceSkin");
+  public static final QualifiedName KEY_SKIN = new QualifiedName(Activator.PLUGIN_ID, "deviceSkin");
 
   /**
    * @return <code>true</code> skin enabled.

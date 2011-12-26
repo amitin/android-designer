@@ -18,7 +18,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.android.ide.eclipse.adt
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.wb.android.internal.model.layouts,
+Export-Package: org.eclipse.wb.android.internal,
+ org.eclipse.wb.android.internal.editor,
+ org.eclipse.wb.android.internal.model.layouts,
  org.eclipse.wb.android.internal.model.layouts.table,
  org.eclipse.wb.android.internal.model.property,
  org.eclipse.wb.android.internal.model.property.accessor,
@@ -29,5 +31,6 @@ Export-Package: org.eclipse.wb.android.internal.model.layouts,
  org.eclipse.wb.android.internal.model.util,
  org.eclipse.wb.android.internal.model.widgets,
  org.eclipse.wb.android.internal.parser,
+ org.eclipse.wb.android.internal.preferences,
  org.eclipse.wb.android.internal.support,
  org.eclipse.wb.android.internal.support.resources.ui

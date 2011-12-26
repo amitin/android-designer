@@ -8,30 +8,33 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package org.eclipse.wb.tests.designer.android.model;
+package org.eclipse.wb.tests.designer.android.gef;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.text.Document;
-import org.eclipse.wb.android.internal.AndroidToolkitDescription;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.wb.android.internal.Activator;
+import org.eclipse.wb.android.internal.editor.AndroidEditor;
 import org.eclipse.wb.android.internal.model.widgets.ViewInfo;
-import org.eclipse.wb.android.internal.parser.AndroidEditorContext;
-import org.eclipse.wb.android.internal.parser.AndroidParser;
-import org.eclipse.wb.internal.core.model.description.ToolkitDescription;
+import org.eclipse.wb.android.internal.preferences.IPreferenceConstants;
+import org.eclipse.wb.android.internal.support.DeviceManager;
+import org.eclipse.wb.gef.core.tools.CreationTool;
 import org.eclipse.wb.internal.core.utils.jdt.core.CodeUtils;
+import org.eclipse.wb.internal.core.xml.editor.AbstractXmlEditor;
 import org.eclipse.wb.internal.core.xml.model.XmlObjectInfo;
-import org.eclipse.wb.tests.designer.XML.model.AbstractXmlModelTest;
+import org.eclipse.wb.tests.designer.XML.editor.AbstractXmlGefTest;
 import org.eclipse.wb.tests.designer.android.tests.AndroidProjectUtils;
 import org.eclipse.wb.tests.designer.core.TestProject;
 
 import com.android.sdklib.IAndroidTarget;
 
 /**
- * Abstract super class for Android tests.
+ * Abstract super class for Android GEF tests.
  * 
  * @author sablin_aa
  */
-public abstract class AndroidModelTest extends AbstractXmlModelTest {
+public abstract class AndroidGefTest extends AbstractXmlGefTest {
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Life cycle
@@ -40,11 +43,11 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		configureForTestPreferences(AndroidToolkitDescription.INSTANCE);
+		configureForTestPreferences(Activator.getToolkit().getPreferences());
 	}
 	@Override
 	protected void tearDown() throws Exception {
-		configureDefaultPreferences(AndroidToolkitDescription.INSTANCE);
+		configureDefaultPreferences(Activator.getToolkit().getPreferences());
 		super.tearDown();
 	}
 	////////////////////////////////////////////////////////////////////////////
@@ -86,16 +89,35 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	/**
 	 * Configures test values for toolkit preferences.
 	 */
-	protected void configureForTestPreferences(ToolkitDescription toolkit) {
+	protected void configureForTestPreferences(IPreferenceStore preferences) {
+		// direct edit
+		preferences.setValue(IPreferenceConstants.P_GENERAL_DIRECT_EDIT_AFTER_ADD, false);
 	}
 	/**
 	 * Configures default values for toolkit preferences.
 	 */
-	protected void configureDefaultPreferences(ToolkitDescription toolkit) {
-		/*IPreferenceStore preferences = toolkit.getPreferences();
-		preferences.setToDefault(IPreferenceConstants.P_LAYOUT_DATA_NAME_TEMPLATE);
-		preferences.setToDefault(IPreferenceConstants.P_LAYOUT_NAME_TEMPLATE);
-		NamesManager.setNameDescriptions(toolkit, ImmutableList.<ComponentNameDescription>of());*/
+	protected void configureDefaultPreferences(IPreferenceStore preferences) {
+		/*preferences.setToDefault(IPreferenceConstants.P_LAYOUT_DATA_NAME_TEMPLATE);
+		preferences.setToDefault(IPreferenceConstants.P_LAYOUT_NAME_TEMPLATE);*/
+	}
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Open "Design" and fetch
+	//
+	////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Opens {@link AbstractXmlEditor} with given XML source.
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T extends XmlObjectInfo> T openEditor(String... lines) throws Exception {
+		IFile file = setFileContent(AndroidProjectUtils.RES_PATH + "/test.xml", getTestSource(lines));
+		file.setPersistentProperty(DeviceManager.KEY_SKIN, "false");
+		openDesign(file);
+		return (T) m_contentObject;
+	}
+	@Override
+	protected final String getEditorID() {
+		return AndroidEditor.ID;
 	}
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -120,43 +142,23 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	}
 	////////////////////////////////////////////////////////////////////////////
 	//
-	// Parsing and source
+	// XML source
 	//
 	////////////////////////////////////////////////////////////////////////////
-	/**
-	 * @return the {@link XmlObjectInfo} for parsed XML source, in "res/layout/Text.xml" file.
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	protected final <T extends XmlObjectInfo> T parse(String... lines) throws Exception {
-		String source = getTestSource(lines);
-		return (T) parse0(AndroidProjectUtils.RES_PATH + "/test.xml", source);
-	}
-	/**
-	 * Parses XML resource file with given path and content.
-	 */
-	protected final XmlObjectInfo parse0(String path, String content) throws Exception {
-		AndroidEditorContext context =
-				new AndroidEditorContext(setFileContent(path, content), new Document(content));
-		m_lastObject = new AndroidParser(context).parse();
-		m_lastContext = m_lastObject.getContext();
-		m_lastLoader = m_lastContext.getClassLoader();
-		return m_lastObject;
-	}
 	@Override
 	protected String getTestSource_namespaces() {
 		return StringUtils.EMPTY;
 	}
 	////////////////////////////////////////////////////////////////////////////
 	//
-	// Utils
+	// Tool
 	//
 	////////////////////////////////////////////////////////////////////////////
 	/**
-	 * @return {@link ViewInfo} for {@link android.widget.Button} with text.
+	 * Loads {@link CreationTool} with {@link android.widget.Button} with text.
 	 */
-	protected final ViewInfo createButton() throws Exception {
-		return createObject("android.widget.Button");
+	protected final ViewInfo loadButton() throws Exception {
+		return loadCreationTool("android.widget.Button");
 	}
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -167,51 +169,66 @@ public abstract class AndroidModelTest extends AbstractXmlModelTest {
 	 * Prepares empty <code>test.MyComponent</code> class with additional lines in type body.
 	 */
 	/*protected final void prepareMyComponent(String... lines) throws Exception {
-	  prepareMyComponent(lines, ArrayUtils.EMPTY_STRING_ARRAY);
+		prepareMyComponent(lines, ArrayUtils.EMPTY_STRING_ARRAY);
 	}*/
 	/**
 	 * Prepares empty <code>test.MyComponent</code> class with additional lines in type body, and with special
 	 * <code>wbp-component.xml</code> description.
 	 */
-	/*protected final void prepareMyComponent(String[] javaLines, String[] descriptionLines)
-	    throws Exception {
-	  // java
-	  {
-	    String[] lines =
-	        new String[]{
-	            "package test;",
-	            "import org.eclipse.swt.SWT;",
-	            "import org.eclipse.swt.widgets.*;",
-	            "public class MyComponent extends Composite {",
-	            "  public MyComponent(Composite parent, int style) {",
-	            "    super(parent, style);",
-	            "  }"};
-	    lines = CodeUtils.join(lines, javaLines);
-	    lines = CodeUtils.join(lines, new String[]{"}"});
-	    setFileContentSrc("test/MyComponent.java", getSourceDQ(lines));
-	  }
-	  // description
-	  {
-	    String[] lines =
-	        new String[]{
-	            "<?xml version='1.0' encoding='UTF-8'?>",
-	            "<component xmlns='http://www.eclipse.org/wb/WBPComponent'>"};
-	    descriptionLines = removeFillerLines(descriptionLines);
-	    lines = CodeUtils.join(lines, descriptionLines);
-	    lines = CodeUtils.join(lines, new String[]{"</component>"});
-	    setFileContentSrc("test/MyComponent.wbp-component.xml", getSourceDQ(lines));
-	  }
-	  waitForAutoBuild();
+	/*protected final void prepareMyComponent(String[] javaLines, String[] descriptionLines) throws Exception {
+		// java
+		{
+			String[] lines =
+					new String[]{
+							"package test;",
+							"import org.eclipse.swt.SWT;",
+							"import org.eclipse.swt.widgets.*;",
+							"public class MyComponent extends Composite {",
+							"  public MyComponent(Composite parent, int style) {",
+							"    super(parent, style);",
+							"  }"};
+			lines = CodeUtils.join(lines, javaLines);
+			lines = CodeUtils.join(lines, new String[]{"}"});
+			setFileContentSrc("test/MyComponent.java", getSourceDQ(lines));
+		}
+		// description
+		{
+			String[] lines =
+					new String[]{
+							"<?xml version='1.0' encoding='UTF-8'?>",
+							"<component xmlns='http://www.eclipse.org/wb/WBPComponent'>"};
+			descriptionLines = removeFillerLines(descriptionLines);
+			lines = CodeUtils.join(lines, descriptionLines);
+			lines = CodeUtils.join(lines, new String[]{"</component>"});
+			setFileContentSrc("test/MyComponent.wbp-component.xml", getSourceDQ(lines));
+		}
+		waitForAutoBuild();
+	}*/
+	////////////////////////////////////////////////////////////////////////////
+	//
+	// Box
+	//
+	////////////////////////////////////////////////////////////////////////////
+	/*protected void prepareBox() throws Exception {
+		prepareBox(100, 50);
 	}
-
-	protected final ComponentDescription getMyDescription() throws Exception {
-	  return getDescription("test.MyComponent");
+	protected void prepareBox(int width, int height) throws Exception {
+		setFileContentSrc(
+			"test/Box.java",
+			getJavaSource(
+				"public class Box extends org.eclipse.swt.widgets.Button {",
+				"  public Box(Composite parent, int style) {",
+				"    super(parent, style);",
+				"  }",
+				"  protected void checkSubclass () {",
+				"  }",
+				"  public Point computeSize (int wHint, int hHint, boolean changed) {",
+				"    return new Point(" + width + ", " + height + ");",
+				"  }",
+				"}"));
+		waitForAutoBuild();
 	}
-
-	protected final ComponentDescription getDescription(String componentClassName) throws Exception {
-	  if (m_lastContext == null) {
-	    parse("<Shell/>");
-	  }
-	  return ComponentDescriptionHelper.getDescription(m_lastContext, componentClassName);
+	protected ControlInfo loadBox() throws Exception {
+		return loadCreationTool("test.Box");
 	}*/
 }
