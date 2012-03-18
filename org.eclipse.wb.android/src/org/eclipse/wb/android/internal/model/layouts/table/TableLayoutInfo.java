@@ -164,6 +164,35 @@ public class TableLayoutInfo extends LinearLayoutInfo {
     m_layoutSupport.insertColumn(columnIndex);
   }
 
+  /**
+   * Moves a row from sourceIndex to targetIndex. Invoked by moving a header.<br>
+   * TODO: probably do move using model, but it's fine to move a row this way, because the model
+   * will be re-created after the command is executed.
+   * 
+   * @param sourceIndex
+   * @param targetIndex
+   */
+  public void moveRow(int sourceIndex, int targetIndex) throws Exception {
+    // reference row
+    List<TableRowInfo> childrenRows = getChildrenRows();
+    TableRowInfo thisRow = childrenRows.get(sourceIndex);
+    TableRowInfo nextRow = null;
+    if (targetIndex < childrenRows.size()) {
+      nextRow = childrenRows.get(targetIndex);
+    }
+    XmlObjectUtils.move(thisRow, Associations.direct(), this, nextRow);
+  }
+
+  /**
+   * Moves a column from sourceIndex to targetIndex.
+   * 
+   * @param sourceIndex
+   * @param targetIndex
+   */
+  public void moveColumn(int sourceIndex, int targetIndex) throws Exception {
+    m_layoutSupport.moveColumn(sourceIndex, targetIndex);
+  }
+
   ////////////////////////////////////////////////////////////////////////////
   //
   // Delete

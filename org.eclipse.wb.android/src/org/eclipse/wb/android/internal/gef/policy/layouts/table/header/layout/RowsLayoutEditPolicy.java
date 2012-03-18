@@ -4,6 +4,7 @@ import org.eclipse.wb.android.internal.gef.policy.layouts.table.TableLayoutEditP
 import org.eclipse.wb.android.internal.gef.policy.layouts.table.header.part.RowHeaderEditPart;
 import org.eclipse.wb.android.internal.gef.policy.layouts.table.header.selection.RowSelectionEditPolicy;
 import org.eclipse.wb.android.internal.model.layouts.table.TableLayoutInfo;
+import org.eclipse.wb.core.gef.command.EditCommand;
 import org.eclipse.wb.core.gef.figure.TextFeedback;
 import org.eclipse.wb.core.gef.header.AbstractHeaderLayoutEditPolicy;
 import org.eclipse.wb.core.gef.policy.layout.grid.AbstractGridLayoutEditPolicy;
@@ -148,16 +149,16 @@ public final class RowsLayoutEditPolicy extends AbstractHeaderLayoutEditPolicy {
       // set text
       m_feedback.setText(MessageFormat.format("row: {0}", targetIndex));
     }
-    // prepare command XXX
-    /*{
-    	final int sourceIndex = headerEditPart.getIndex();
-    	m_moveCommand = new EditCommand(m_layout) {
-    		@Override
-    		protected void executeEdit() throws Exception {
-    			m_layout.moveRow(sourceIndex, targetIndex);
-    		}
-    	};
-    }*/
+    // prepare command
+    {
+      final int sourceIndex = headerEditPart.getIndex();
+      m_moveCommand = new EditCommand(m_tableLayout) {
+        @Override
+        protected void executeEdit() throws Exception {
+          m_tableLayout.moveRow(sourceIndex, targetIndex);
+        }
+      };
+    }
   }
 
   @Override

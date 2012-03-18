@@ -59,11 +59,12 @@ public abstract class DimensionHeaderEditPart extends GraphicalEditPart
   //
   ////////////////////////////////////////////////////////////////////////////
   /**
-   * @return the index of this {@link DimensionInfo}.
+   * @return the index of this {@link HeaderInfo}.
    */
-  /*public final int getIndex() {
-    return m_dimension.getIndex();
-  }*/
+  public final int getIndex() {
+    return m_header.getIndex();
+  }
+
   /**
    * @return the model.
    */

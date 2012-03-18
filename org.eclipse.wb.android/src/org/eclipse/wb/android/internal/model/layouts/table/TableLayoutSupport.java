@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.wb.android.internal.model.layouts.table;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -19,6 +20,7 @@ import org.eclipse.wb.draw2d.geometry.Rectangle;
 import org.eclipse.wb.internal.core.utils.reflect.ReflectionUtils;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.NotImplementedException;
 
 import java.util.List;
 import java.util.Map;
@@ -127,11 +129,11 @@ public final class TableLayoutSupport {
   }
 
   public int getViewRow(ViewInfo view) {
-    return 0;
+    throw new NotImplementedException();
   }
 
   public int getViewColumn(ViewInfo view) {
-    return 0;
+    throw new NotImplementedException();
   }
 
   public int getRowCount() {
@@ -297,8 +299,7 @@ public final class TableLayoutSupport {
         m_layout.deleteView0(view);
       }
     }
-    // remove column from model
-    removeColumn(column);
+    // optimize will remove column from model
     optimize();
   }
 
@@ -425,6 +426,34 @@ public final class TableLayoutSupport {
     }
     TableLayoutUtils.setSpanValue(view, cell.span);
     // optimize
+    optimize();
+  }
+
+  /**
+   * Moves a column from sourceIndex to targetIndex.
+   * 
+   * @param sourceIndex
+   * @param targetIndex
+   */
+  public void moveColumn(int sourceIndex, int targetIndex) throws Exception {
+    // add new column
+    insertColumn(targetIndex);
+    // gather cells with views
+    List<CellInfo> cells = Lists.newArrayList();
+    for (int row = 0; row < m_rows; ++row) {
+      CellInfo cell = m_cells[row][sourceIndex];
+      if (cell.view != null) {
+        cells.add(cell);
+      }
+    }
+    // delete column
+    removeColumn(sourceIndex);
+    // add views into new column
+    targetIndex--;
+    for (int i = 0; i < cells.size(); ++i) {
+      CellInfo cell = cells.get(i);
+      addView0(cell.view, cell.row, targetIndex);
+    }
     optimize();
   }
 
