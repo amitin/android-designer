@@ -12,7 +12,7 @@
 	<!-- ======================================================== -->
 	<!-- Java parser validator -->
 	<!-- ======================================================== -->
-	<extension point="org.eclipse.wb.core.parseFactories">
+	<extension point="org.eclipse.wb.core.java.parseFactories">
 		<validator class="org.eclipse.wb.android.internal.parser.AndroidJavaParseValidator"/>
 	</extension>
 
